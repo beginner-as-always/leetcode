@@ -34,16 +34,16 @@ public class MyLinkedList {
     }
 
     public void addAtHead(int val) {
+        size++;
+
         if (head == null) {
             head = new Node(val, null, null);
-        }
-        else {
-            Node newHead = new Node(val, head, null);
-            head.prev = newHead;
-            head = newHead;
+            return;
         }
 
-        size++;
+        Node newHead = new Node(val, head, null);
+        head.prev = newHead;
+        head = newHead;
     }
 
     public void addAtIndex(int index, int val) {
@@ -60,48 +60,53 @@ public class MyLinkedList {
         }
 
         Node newNext = new Node(val, tmp.next, tmp);
-        newNext.prev = tmp.next;
+        tmp.next.prev = newNext;
         tmp.next = newNext;
 
         size++;
-
-//        System.out.println("index = " + index + ", value = " + tmp.data);
     }
 
     public void addAtTail(int val) {
+        size++;
+
         if (head == null) {
             head = new Node(val, null, null);
-        }
-        else {
-            Node tmp = head;
-
-            while (tmp.next != null) {
-                tmp = tmp.next;
-            }
-
-            tmp.next = new Node(val, null, tmp);
+            return;
         }
 
-        size++;
+        Node tmp = head;
+
+        while (tmp.next != null) {
+            tmp = tmp.next;
+        }
+
+        tmp.next = new Node(val, null, tmp);
+    }
+
+    public void deleteAtIndex(int index) {
+        if (index < 0 || index >= size)
+            return;
+
+        Node tmp = head;
+
+        for (int i = 0; i < index; i++) {
+            tmp = tmp.next;
+        }
+
+        tmp.prev.next = tmp.next;
+        tmp.next.prev = tmp.prev;
+
+        size--;
     }
 
     public void print() {
         Node tmp = head;
 
         while (tmp != null) {
-            System.out.printf("%-4d|", tmp.data);
+            System.out.printf("%-4d", tmp.data);
             tmp = tmp.next;
         }
-        System.out.println();
-        for (int i = 0; i < size; i++) {
-            System.out.print("-----");
-        }
-        System.out.println();
-        for (int i = 0; i < size; i++) {
-            System.out.printf("%2d   ", i);
-        }
 
-        System.out.println();
         System.out.println();
     }
 
@@ -112,19 +117,10 @@ public class MyLinkedList {
             tmp = tmp.next;
 
         while (tmp != null) {
-            System.out.printf("%-4d|", tmp.data);
+            System.out.printf("%-4d", tmp.data);
             tmp = tmp.prev;
         }
-        System.out.println();
-        for (int i = 0; i < size; i++) {
-            System.out.print("-----");
-        }
-        System.out.println();
-        for (int i = size - 1; i >= 0; i--) {
-            System.out.printf("%2d   ", i);
-        }
 
-        System.out.println();
         System.out.println();
     }
 
@@ -146,8 +142,11 @@ public class MyLinkedList {
         list.addAtIndex(1, 5);
 
         list.print();
-        System.out.println();
+        list.printReverted();
 
+        list.deleteAtIndex(2);
+
+        list.print();
         list.printReverted();
     }
 }
