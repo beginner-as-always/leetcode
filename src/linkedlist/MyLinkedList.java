@@ -47,8 +47,10 @@ public class MyLinkedList {
     }
 
     public void addAtIndex(int index, int val) {
-        if (size == 0 && index == 0)
+        if (size == 0 && index == 0) {
             addAtHead(val);
+            return;
+        }
 
         if (index < 0 || index >= size)
             return;
