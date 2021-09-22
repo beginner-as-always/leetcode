@@ -21,6 +21,18 @@ public class MyLinkedList {
         size = 0;
     }
 
+    public void set(int index, int val) {
+        if (index < 0 || index >= size)
+            return;
+
+        Node tmp = head;
+
+        for (int i = 0; i < index; i++)
+            tmp = tmp.next;
+
+        tmp.data = val;
+    }
+
     public int get(int index) {
         if (index < 0 || index >= size)
             return -1;
@@ -47,13 +59,18 @@ public class MyLinkedList {
     }
 
     public void addAtIndex(int index, int val) {
-        if (size == 0 && index == 0) {
+        if (index < 0 || index > size)
+            return;
+
+        if (index == 0) {
             addAtHead(val);
             return;
         }
 
-        if (index < 0 || index >= size)
+        if (index == size) {
+            addAtTail(val);
             return;
+        }
 
         Node tmp = head;
 
@@ -85,9 +102,45 @@ public class MyLinkedList {
         tmp.next = new Node(val, null, tmp);
     }
 
+    public void deleteAtHead() {
+        if (head == null)
+            return;
+
+        head = head.next;
+
+        if (head != null && head.prev != null)
+            head.prev = null;
+
+        size--;
+    }
+
+    public void deleteAtTail() {
+        if (head == null)
+            return;
+
+        Node tmp = head;
+
+        while (tmp.next != null) {
+            tmp = tmp.next;
+        }
+
+        tmp.prev.next = null;
+        size--;
+    }
+
     public void deleteAtIndex(int index) {
         if (index < 0 || index >= size)
             return;
+
+        if (index == 0) {
+            deleteAtHead();
+            return;
+        }
+
+        if (index == size - 1) {
+            deleteAtTail();
+            return;
+        }
 
         Node tmp = head;
 
@@ -129,26 +182,16 @@ public class MyLinkedList {
     public static void main(String[] args) {
         var list = new MyLinkedList();
 
-//        list.addAtHead(10);
-//        list.addAtHead(21);
-//        list.addAtHead(56);
-
-        list.addAtTail(12);
-        list.addAtTail(43);
-        list.addAtTail(32);
-
-//        System.out.println(list.get(0));
-//        System.out.println(list.get(1));
-//        System.out.println(list.get(2));
-
-        list.addAtIndex(1, 5);
-
-        list.print();
-        list.printReverted();
-
+        list.addAtHead(7);
+        list.addAtHead(2);
+        list.addAtHead(1);
+        list.addAtIndex(3, 0);
         list.deleteAtIndex(2);
-
-        list.print();
-        list.printReverted();
+        list.addAtHead(6);
+        list.addAtTail(4);
+        System.out.println(list.get(4));
+        list.addAtHead(4);
+        list.addAtIndex(5, 0);
+        list.addAtHead(6);
     }
 }
